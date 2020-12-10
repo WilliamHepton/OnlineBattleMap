@@ -1,1 +1,44 @@
-<p>grid works!</p>
+<div class="options-header">
+  <mat-form-field>
+    <mat-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
+                placeholder="Display grid lines"
+                (ngModelChange)="changedOptions()">
+      <mat-option value="always">Always</mat-option>
+      <mat-option value="onDrag&Resize">On Drag & Resize</mat-option>
+      <mat-option value="none">None</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+            (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
+            (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="backgroundRAW" type="text" placeholder="Image URL"
+            (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<gridster class="grid" [ngStyle]="{'background-image': backgroundURL}" [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <div class="item-buttons" *ngIf="item.hasContent">
+        <button mat-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
+                (touchstart)="removeItem($event, item)">
+          <mat-icon>x</mat-icon>
+        </button>
+      </div>
+      <label *ngIf="!item.hasContent">{{item.label}}</label>
+      <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)">
+        <mat-icon>x</mat-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>
