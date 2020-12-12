@@ -1,5 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType } from 'angular-gridster2';
+import {CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { BattleImage } from '../Entities/battle-image';
+import { GridItem, GridItemContent } from '../Entities/grid-item';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-grid',
@@ -8,38 +12,38 @@ import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType } from
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class GridComponent implements OnInit {
+export class GridComponent implements OnInit, OnChanges {
+  @ViewChild('grid', {static: false}) gridDiv: ElementRef;
+  @Input() backgroundRAW: string;
 
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
-  backgroundRAW = "";
+  battleGrid: Array<GridItemContent>;
   backgroundURL: string = "url(https://i.pinimg.com/originals/1e/94/a7/1e94a7d9d18a0ee861a5a64f6d974e7c.jpg)";
+  
+  newImageDrop: BattleImage = {name: "", url: ""};
+  test: string[] = [];
 
-  static itemChange(item, itemComponent) {
-    console.info('itemChanged', item, itemComponent);
+  constructor(private renderer: Renderer2, private cd: ChangeDetectorRef) { }
+
+  ngOnChanges(): void {
+    this.backgroundURL = "url(" + this.backgroundRAW + ")";
   }
-
-  static itemResize(item, itemComponent) {
-    console.info('itemResized', item, itemComponent);
-  }
-
-  constructor() { }
 
   ngOnInit() {
     this.options = {
       gridType: GridType.Fixed,
       compactType: CompactType.None,
       margin: 0,
-      outerMargin: true,
+      outerMargin: false,
       outerMarginTop: null,
       outerMarginRight: null,
       outerMarginBottom: null,
       outerMarginLeft: null,
       useTransformPositioning: true,
       mobileBreakpoint: 640,
-      minCols: 50,
+      minCols: 55,
       maxCols: 1000,
-      minRows: 50,
+      minRows: 55,
       maxRows: 1000,
       maxItemCols: 100,
       minItemCols: 1,
@@ -49,8 +53,8 @@ export class GridComponent implements OnInit {
       minItemArea: 1,
       defaultItemCols: 1,
       defaultItemRows: 2,
-      fixedColWidth: 50,
-      fixedRowHeight: 50,
+      fixedColWidth: 55,
+      fixedRowHeight: 55,
       keepFixedHeightInMobile: false,
       keepFixedWidthInMobile: false,
       scrollSensitivity: 10,
@@ -82,15 +86,14 @@ export class GridComponent implements OnInit {
       scrollToNewItems: false
     };
 
-    this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0},
-      {cols: 2, rows: 2, y: 0, x: 2, hasContent: true},
-      {cols: 1, rows: 1, y: 0, x: 4},
-      {cols: 1, rows: 1, y: 2, x: 5},
-      {cols: 1, rows: 1, y: 1, x: 0},
-      {cols: 1, rows: 1, y: 1, x: 0},
-      {cols: 1, rows: 1, y: 2, x: 6}
+    this.battleGrid = [
+      {id: 1, battleImage: {name: "Aurora", url: ""}, cols: 1, rows: 2, y: 10, x: 5},
+      {id: 2, battleImage: {name: "Alavar", url: ""}, cols: 1, rows: 2, y: 10, x: 10},
+      {id: 3, battleImage: {name: "Mob", url: ""}, cols: 2, rows: 2, y: 5, x: 7}
     ];
+  }
+
+  ngAfterViewInit() {
   }
 
   changedOptions(): void {
@@ -103,11 +106,25 @@ export class GridComponent implements OnInit {
   removeItem($event: MouseEvent | TouchEvent, item): void {
     $event.preventDefault();
     $event.stopPropagation();
-    this.dashboard.splice(this.dashboard.indexOf(item), 1);
+    this.battleGrid.splice(this.battleGrid.indexOf(item), 1);
   }
 
   addItem(): void {
-    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+    this.battleGrid.push({id: this.newItemId(), battleImage: {name: "", url: ""}, cols: 2, rows: 2, y: 0, x: 0});
   }
 
+  newItemId(): number {
+    return this.battleGrid[this.battleGrid.length-1].id + 1;
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    copyArrayItem(event.previousContainer.data,
+                      this.test,
+                      event.previousIndex,
+                      event.currentIndex);
+    this.newImageDrop = JSON.parse(JSON.stringify(this.test[0]));
+    this.newImageDrop.url = "url(" + this.newImageDrop.url + ")";
+    console.log(this.newImageDrop);
+    event.container.element.nativeElement.style.setProperty("background-image", this.newImageDrop.url.toString());
+  }
 }

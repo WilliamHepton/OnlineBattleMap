@@ -12,7 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSidenavModule} from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,9 +35,11 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatFormFieldModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatSidenavModule
-   /* MatButtonModule, MatCheckboxModule, MatToolbarModule, MatInputModule,
-    MatProgressSpinnerModule, MatCardModule, MatMenuModule, MatIconModule*/
+    MatSidenavModule,
+    MatDividerModule,
+    MatListModule,
+    DragDropModule,
+    HttpClientModule
   ],
   exports: [
     MatIconModule,

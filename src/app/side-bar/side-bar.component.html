@@ -1,12 +1,111 @@
+<div cdkDropListGroup>
 <mat-sidenav-container class="example-container">
-  <mat-sidenav #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
-               (closed)="events.push('close!')">
-    Sidenav content
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+    <div class="upload-file">
+      <h2>Upload image</h2>
+      <input type="file" (change)="onFileSelect($event)">
+      <button type="button" (click)="onUpload()">Upload</button>
+    </div>
+      <div class="example-container">
+        <h2>Maps</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="maps"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of maps" cdkDrag>
+            <img [src]="item.url">
+            {{item.name}}
+            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-container">
+        <h2>Players</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="players"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of players" cdkDrag>
+            <img [src]="item.url">
+            {{item.name}}
+            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-container">
+        <h2>Creatures</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="creatures"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of creatures" cdkDrag>
+            <img [src]="item.url">
+            {{item.name}}
+            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-container">
+        <h2>Effects</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="effects"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of effects" cdkDrag>
+            <img [src]="item.url">
+            {{item.name}}
+            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
+          </div>
+        </div>
+      </div>
+      <div class="example-container">
+        <h2>Other</h2>
+        <div
+          cdkDropList
+          [cdkDropListData]="other"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of other" cdkDrag>
+            <img [src]="item.url">
+            {{item.name}}
+            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
+          </div>
+        </div>
+      </div>
+    
+    <h2>Grid</h2>
+    <!-- <mat-form-field>
+      <mat-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
+                  placeholder="Display grid lines"
+                  (ngModelChange)="changedOptions()">
+        <mat-option value="always">Always</mat-option>
+        <mat-option value="onDrag&Resize">On Drag & Resize</mat-option>
+        <mat-option value="none">None</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+              (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
+              (ngModelChange)="changedOptions()">
+    </mat-form-field>-->
+    <mat-form-field>
+      <input matInput [(ngModel)]="backgroundRAW" type="text" placeholder="Image URL"
+              (ngModelChange)="changedOptions()">
+    </mat-form-field>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <p><button mat-button (click)="sidenav.toggle()">Menu</button></p>
-    <app-grid></app-grid>
+    <button mat-button (click)="sidenav.toggle()">Menu</button>
+    <app-grid
+      [backgroundRAW]="backgroundRAW"></app-grid>
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+</div>

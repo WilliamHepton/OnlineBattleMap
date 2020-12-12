@@ -1,10 +1,10 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 .grid {
-    height: 1000px !important;
+    min-height: 1500px;
+    height: auto !important;
     background-color: gainsboro;
     border-color: black;
-    overflow: hidden;
     background-size: 100%;
 }
 
@@ -15,4 +15,13 @@ mat-form-field {
 
 mat-option{
     margin: 30px;
+}
+
+.grid-item {
+    background-size: 100% 100%;
+}
+
+::ng-deep .grid-image {
+    max-width: 100%;
+    height: auto;
 }
