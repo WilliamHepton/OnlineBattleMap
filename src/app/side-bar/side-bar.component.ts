@@ -1,7 +1,8 @@
 import { Component,  OnInit } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { BattleImage } from '../Entities/battle-image';
+import { BattleImage } from '../entities/battle-image';
+import { WebSocketService } from '../web-socket.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -19,9 +20,13 @@ export class SideBarComponent implements OnInit {
   effects: BattleImage[] = [];
   other: BattleImage[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private webSocketService: WebSocketService) { }
 
   ngOnInit() {
+    //listen to event from socket.io server
+    this.webSocketService.listen('test event').subscribe((data) => {
+      console.log(data);
+    });
   }
 
 

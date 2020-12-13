@@ -24,7 +24,6 @@
 <gridster class="grid" [ngStyle]="{'background-image': backgroundURL, 'overflow': 'hidden'}" [options]="options">
   <gridster-item class="grid-item" [item]="item" *ngFor="let item of battleGrid"
     cdkDropList
-    [cdkDropListData]="mapsz"
     (cdkDropListDropped)="drop($event)"
     >
   </gridster-item>

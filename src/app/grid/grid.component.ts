@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType } from 'angular-gridster2';
 import {CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { BattleImage } from '../Entities/battle-image';
-import { GridItem, GridItemContent } from '../Entities/grid-item';
+import { BattleImage } from '../entities/battle-image';
+import { GridItem, GridItemContent } from '../entities/grid-item';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
