@@ -5,6 +5,7 @@ import * as io from "socket.io-client/dist/socket.io";
 @Injectable({
   providedIn: 'root'
 })
+
 export class WebSocketService {
 
   socket: any;
