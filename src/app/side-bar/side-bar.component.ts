@@ -1,8 +1,8 @@
 import { Component,  OnInit } from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BattleImage } from '../entities/battle-image';
 import { WebSocketService } from '../web-socket.service';
+import { DownloadedImage } from '../entities/downloaded-image';
 
 @Component({
   selector: 'app-side-bar',
@@ -19,6 +19,7 @@ export class SideBarComponent implements OnInit {
   creatures: BattleImage[] = [];
   effects: BattleImage[] = [];
   other: BattleImage[] = [];
+  testSource: string = '';
 
   constructor(private webSocketService: WebSocketService) { }
 
@@ -31,7 +32,6 @@ export class SideBarComponent implements OnInit {
 
 
   changedOptions(): void {
-      console.log("sidebar");
   }
 
   onFileSelect(event) {
@@ -40,28 +40,30 @@ export class SideBarComponent implements OnInit {
   }
 
   onUpload() {
-   /* const fd = new FormData();
-    fd.append('image', this.selectedFile, this.selectedFile.name)
-    this.http.post('http....', fd, {
-      reportProgress: true,
-      observe: 'events'
-    })
-      .subscribe(event => {
-        if(event.type === HttpEventType.UploadProgress){
-          console.log('Upload Progress: ' + Math.round(event.loaded/event.total * 100) + '%' );
-        } else if (event.type === HttpEventType.Response) {
-          console.log(event);
-        }
-      });*/
-      
+    let imgFile = this.selectedFile.target.files[0];
     let newImage: BattleImage = {name: "", url: ""};
-    newImage.name = this.trimName(this.selectedFile.target.files[0].name);
+    newImage.name = this.trimName(imgFile.name);
     var reader = new FileReader();
-    reader.readAsDataURL(this.selectedFile.target.files[0]);
-    reader.onload = (event) => {
+    reader.readAsDataURL(imgFile);
+    reader.onload = () => {
       newImage.url = reader.result;
       this.maps.push(newImage);
-    }    
+    }
+    let uploadObject = {name: imgFile.name, file: imgFile}
+    this.webSocketService.emit('imageUpload', uploadObject);
+    console.log(newImage);
+
+  }
+
+  getImage() {
+    let newImage: BattleImage = {name: "", url: ""};
+    this.webSocketService.emit('getImage', 'auroramum.jpg');
+    this.webSocketService.listen('returnImage').subscribe((data) => {
+      let imgData: DownloadedImage = data as DownloadedImage;
+      newImage.name = this.trimName(imgData.name);
+      newImage.url = "data:image/jpeg;base64,"+ imgData.file;
+      this.maps.push(newImage);
+    });
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -132,6 +134,4 @@ export class SideBarComponent implements OnInit {
       }
     }
   }
-
-
 }
