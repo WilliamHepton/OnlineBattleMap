@@ -20,7 +20,7 @@ export class GridComponent implements OnInit, OnChanges {
   battleGrid: Array<GridItemContent>;
   backgroundURL: string = "url(https://i.pinimg.com/originals/1e/94/a7/1e94a7d9d18a0ee861a5a64f6d974e7c.jpg)";
   
-  newImageDrop: BattleImage = {name: "", url: ""};
+  newImageDrop: BattleImage = {name: "", url: "", category: ""};
   test: string[] = [];
 
   constructor(private renderer: Renderer2, private cd: ChangeDetectorRef) { }
@@ -87,9 +87,9 @@ export class GridComponent implements OnInit, OnChanges {
     };
 
     this.battleGrid = [
-      {id: 1, battleImage: {name: "Aurora", url: ""}, cols: 1, rows: 2, y: 10, x: 5},
-      {id: 2, battleImage: {name: "Alavar", url: ""}, cols: 1, rows: 2, y: 10, x: 10},
-      {id: 3, battleImage: {name: "Mob", url: ""}, cols: 2, rows: 2, y: 5, x: 7}
+      {id: 1, battleImage: {name: "Aurora", url: "", category:""}, cols: 1, rows: 2, y: 10, x: 5},
+      {id: 2, battleImage: {name: "Alavar", url: "", category:""}, cols: 1, rows: 2, y: 10, x: 10},
+      {id: 3, battleImage: {name: "Mob", url: "", category:""}, cols: 2, rows: 2, y: 5, x: 7}
     ];
   }
 
@@ -110,7 +110,7 @@ export class GridComponent implements OnInit, OnChanges {
   }
 
   addItem(): void {
-    this.battleGrid.push({id: this.newItemId(), battleImage: {name: "", url: ""}, cols: 2, rows: 2, y: 0, x: 0});
+    this.battleGrid.push({id: this.newItemId(), battleImage: {name: "", url: "", category:""}, cols: 2, rows: 2, y: 0, x: 0});
   }
 
   newItemId(): number {
@@ -124,7 +124,6 @@ export class GridComponent implements OnInit, OnChanges {
                       event.currentIndex);
     this.newImageDrop = JSON.parse(JSON.stringify(this.test[0]));
     this.newImageDrop.url = "url(" + this.newImageDrop.url + ")";
-    console.log(this.newImageDrop);
     event.container.element.nativeElement.style.setProperty("background-image", this.newImageDrop.url.toString());
   }
 }

@@ -4,76 +4,21 @@
     <div class="upload-file">
       <h2>Upload image</h2>
       <input type="file" (change)="onFileSelect($event)">
-      <button type="button" (click)="onUpload()">Upload</button>
-      <button type="button" (click)="getImage()">GetImage</button>
+      <button type="button" (click)="onSave()">Save</button>
+      <button type="button" (click)="onLoad()">Load</button>
     </div>
-      <div class="example-container">
-        <h2>Maps</h2>
+      <div class="example-container" *ngFor="let category of categories">
+        <h2>{{category.name}}</h2>
         <div
           cdkDropList
-          [cdkDropListData]="maps"
+          [id]="category.name"
+          [cdkDropListData]="category.images"
           class="example-list"
           (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of maps" cdkDrag>
+          <div class="example-box" *ngFor="let item of category.images" cdkDrag>
             <img [src]="item.url">
             {{item.name}}
-            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
-          </div>
-        </div>
-      </div>
-      <div class="example-container">
-        <h2>Players</h2>
-        <div
-          cdkDropList
-          [cdkDropListData]="players"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of players" cdkDrag>
-            <img [src]="item.url">
-            {{item.name}}
-            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
-          </div>
-        </div>
-      </div>
-      <div class="example-container">
-        <h2>Creatures</h2>
-        <div
-          cdkDropList
-          [cdkDropListData]="creatures"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of creatures" cdkDrag>
-            <img [src]="item.url">
-            {{item.name}}
-            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
-          </div>
-        </div>
-      </div>
-      <div class="example-container">
-        <h2>Effects</h2>
-        <div
-          cdkDropList
-          [cdkDropListData]="effects"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of effects" cdkDrag>
-            <img [src]="item.url">
-            {{item.name}}
-            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
-          </div>
-        </div>
-      </div>
-      <div class="example-container">
-        <h2>Other</h2>
-        <div
-          cdkDropList
-          [cdkDropListData]="other"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of other" cdkDrag>
-            <img [src]="item.url">
-            {{item.name}}
-            <button type="button" (click)="deleteImage(item.name, 'maps')">X</button>
+            <button type="button" (click)="deleteImage(item.name, category.name)">X</button>
           </div>
         </div>
       </div>

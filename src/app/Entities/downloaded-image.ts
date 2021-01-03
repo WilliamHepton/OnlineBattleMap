@@ -1,5 +1,6 @@
 export interface DownloadedImage {
-    _ud: string;
+    _id: string;
     name: string;
-    file: string;
+    url: string;
+    category: string;
 }

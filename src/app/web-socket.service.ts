@@ -9,7 +9,7 @@ import * as io from "socket.io-client/dist/socket.io";
 export class WebSocketService {
 
   socket: any;
-  readonly uri: string = "ws://localhost:3000"; //replace localhost:3000 with the uri of the socket.io server
+  readonly uri: string = "ws://localhost:3000";
 
   constructor() {
     this.socket = io(this.uri);
@@ -17,7 +17,7 @@ export class WebSocketService {
 
   listen(eventName: string){
     return new Observable((subscriber) => {
-      this.socket.on(eventName, (data) => {
+      this.socket.once(eventName, (data) => {
         subscriber.next(data);
       })
     });

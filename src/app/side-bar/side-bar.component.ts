@@ -1,6 +1,6 @@
 import { Component,  OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { BattleImage } from '../entities/battle-image';
+import { BattleImage, Category } from '../entities/battle-image';
 import { WebSocketService } from '../web-socket.service';
 import { DownloadedImage } from '../entities/downloaded-image';
 
@@ -14,11 +14,11 @@ export class SideBarComponent implements OnInit {
   opened: boolean;
   backgroundRAW = "https://i.pinimg.com/originals/1e/94/a7/1e94a7d9d18a0ee861a5a64f6d974e7c.jpg";
   selectedFile;
-  maps: BattleImage[] = [];
-  players: BattleImage[] = [];
-  creatures: BattleImage[] = [];
-  effects: BattleImage[] = [];
-  other: BattleImage[] = [];
+  categories: Category[] = [{name: "maps", images: []},
+    {name: "players", images: []}, 
+    {name: "creatures", images: []}, 
+    {name: "effects", images: []}, 
+    {name: "other", images: []}];
   testSource: string = '';
 
   constructor(private webSocketService: WebSocketService) { }
@@ -36,33 +36,34 @@ export class SideBarComponent implements OnInit {
 
   onFileSelect(event) {
     this.selectedFile = event;
-    
-  }
-
-  onUpload() {
     let imgFile = this.selectedFile.target.files[0];
-    let newImage: BattleImage = {name: "", url: ""};
+    let newImage: BattleImage = {name: "", url: "", category: ""};
     newImage.name = this.trimName(imgFile.name);
+    newImage.category = this.trimName("maps");
     var reader = new FileReader();
     reader.readAsDataURL(imgFile);
     reader.onload = () => {
       newImage.url = reader.result;
-      this.maps.push(newImage);
+      this.categories[0].images.push(newImage);
     }
-    let uploadObject = {name: imgFile.name, file: imgFile}
-    this.webSocketService.emit('imageUpload', uploadObject);
-    console.log(newImage);
-
+   /* let uploadObject = {name: imgFile.name, file: imgFile}
+    this.webSocketService.emit('imageUpload', uploadObject);*/
   }
 
-  getImage() {
-    let newImage: BattleImage = {name: "", url: ""};
-    this.webSocketService.emit('getImage', 'auroramum.jpg');
-    this.webSocketService.listen('returnImage').subscribe((data) => {
-      let imgData: DownloadedImage = data as DownloadedImage;
-      newImage.name = this.trimName(imgData.name);
-      newImage.url = "data:image/jpeg;base64,"+ imgData.file;
-      this.maps.push(newImage);
+  onSave() {
+    this.webSocketService.emit('saveAll', this.categories);
+  }
+
+  onLoad() {
+    this.webSocketService.emit('loadAll', '');
+    this.webSocketService.listen('returnImages').subscribe((data) => {
+      var images: DownloadedImage[] = data as DownloadedImage[];
+      images.forEach(image => {
+        console.log(image.category);
+        this.categories.find(x => x.name === image.category).images.push(
+          {name: this.trimName(image.name), url: image.url, category: image.category}
+        );
+      });
     });
   }
 
@@ -75,6 +76,15 @@ export class SideBarComponent implements OnInit {
                         event.previousIndex,
                         event.currentIndex);
     }
+    this.changeCategory(event.container.id);
+  }
+
+  changeCategory(category: string){
+    console.log(category);
+    this.categories.find(x => x.name === category)
+      .images.forEach(image => {
+        image.category = category;
+      });
   }
 
   trimName(name: string): string{
@@ -85,53 +95,12 @@ export class SideBarComponent implements OnInit {
     return name;
   }
 
-  deleteImage(name: string, list: string){
-    switch(list) {
-      case "maps": {
-        this.maps.splice(this.maps.indexOf(this.maps.find(x => x.name === name)), 1);
-        break;
-      }
-      case "players": {
-        this.players.splice(this.players.indexOf(this.players.find(x => x.name === name)), 1);
-        break;
-      }
-      case "creatures": {
-        this.creatures.splice(this.creatures.indexOf(this.creatures.find(x => x.name === name)), 1);
-        break;
-      }
-      case "effects": {
-        this.effects.splice(this.effects.indexOf(this.effects.find(x => x.name === name)), 1);
-        break;
-      }
-      case "other": {
-        this.other.splice(this.other.indexOf(this.other.find(x => x.name === name)), 1);
-        break;
-      }
-    }
+  deleteImage(name: string, category: string){
+    let images = this.categories.find(x => x.name === category).images;
+    this.categories.find(x => x.name === category).images.splice(images.indexOf(images.find(x => x.name === name)), 1);
   }
 
-  renameImage(list: string, name: string, newName: string) {
-    switch(list) {
-      case "maps": {
-        this.maps.find(x => x.name === name).name = newName;
-        break;
-      }
-      case "players": {
-        this.players.find(x => x.name === name).name = newName;
-        break;
-      }
-      case "creatures": {
-        this.creatures.find(x => x.name === name).name = newName;
-        break;
-      }
-      case "effects": {
-        this.effects.find(x => x.name === name).name = newName;
-        break;
-      }
-      case "other": {
-        this.other.find(x => x.name === name).name = newName;
-        break;
-      }
-    }
+  renameImage(category: string, name: string, newName: string) {
+    this.categories.find(x => x.name === category).images.find(x => x.name === name).name = newName;
   }
 }
