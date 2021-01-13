@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType } from 'angular-gridster2';
-import {CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BattleImage } from '../entities/battle-image';
 import { GridItem, GridItemContent } from '../entities/grid-item';
 import { ChangeDetectorRef } from '@angular/core';
@@ -124,6 +124,8 @@ export class GridComponent implements OnInit, OnChanges {
                       event.currentIndex);
     this.newImageDrop = JSON.parse(JSON.stringify(this.test[0]));
     this.newImageDrop.url = "url(" + this.newImageDrop.url + ")";
+    event.container.element.nativeElement.style.setProperty("background-color", "transparent");
+    event.container.element.nativeElement.style.setProperty("opacity", "100%");
     event.container.element.nativeElement.style.setProperty("background-image", this.newImageDrop.url.toString());
   }
 }

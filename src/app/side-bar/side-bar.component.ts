@@ -11,7 +11,7 @@ import { DownloadedImage } from '../entities/downloaded-image';
 })
 export class SideBarComponent implements OnInit {
 
-  opened: boolean;
+  opened: boolean = true;
   backgroundRAW = "https://i.pinimg.com/originals/1e/94/a7/1e94a7d9d18a0ee861a5a64f6d974e7c.jpg";
   selectedFile;
   categories: Category[] = [{name: "maps", images: []},

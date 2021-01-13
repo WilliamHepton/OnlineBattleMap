@@ -19,6 +19,8 @@ mat-option{
 
 .grid-item {
     background-size: 100% 100%;
+    background-color: white;
+    opacity: 50%;
 }
 
 ::ng-deep .grid-image {
