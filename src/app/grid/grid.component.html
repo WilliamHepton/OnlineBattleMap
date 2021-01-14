@@ -21,14 +21,15 @@
 
 <gridster class="grid" [ngStyle]="{'background-image': backgroundURL, 'overflow': 'hidden'}" [options]="options">
   <gridster-item
-    (mouseover)="showItem=item.id"
-    (mouseout)="hideItem()"
-    class="grid-item" [item]="item"
+    (mouseenter)="enter(item.id)"
+    (mouseleave)="leave(item.id)"
+    class="grid-item"
+    [item]="item"
     *ngFor="let item of battleGrid"
     cdkDropList
     (cdkDropListDropped)="drop($event)"
     >
-    <div *ngIf="showItem == item.id">
+    <div *ngIf="hoverIndex == item.id">
       <button mat-raised-button color="warn" (click)="deleteItem(item)" class="add-button cols-2">X</button>
     </div>
   </gridster-item>

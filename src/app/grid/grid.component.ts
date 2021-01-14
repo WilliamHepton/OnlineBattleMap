@@ -22,7 +22,7 @@ export class GridComponent implements OnInit, OnChanges {
   
   newImageDrop: BattleImage = {name: "", url: "", category: ""};
   test: string[] = [];
-  showItem: string = '';
+  hoverIndex;
 
   constructor(private renderer: Renderer2, private cd: ChangeDetectorRef) { }
 
@@ -134,9 +134,11 @@ export class GridComponent implements OnInit, OnChanges {
     this.battleGrid.splice(this.battleGrid.findIndex(x => x.id === event.id),1);
   }
 
-  hideItem() {
-    setTimeout(function () {
-      this.showItem = '';
-    }, 2000);
+  enter(i) {
+    this.hoverIndex = i;
+  }
+
+  leave(i) {
+    this.hoverIndex = '';
   }
 }
