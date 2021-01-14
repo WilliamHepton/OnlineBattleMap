@@ -22,6 +22,7 @@ export class GridComponent implements OnInit, OnChanges {
   
   newImageDrop: BattleImage = {name: "", url: "", category: ""};
   test: string[] = [];
+  showItem: string = '';
 
   constructor(private renderer: Renderer2, private cd: ChangeDetectorRef) { }
 
@@ -127,5 +128,13 @@ export class GridComponent implements OnInit, OnChanges {
     event.container.element.nativeElement.style.setProperty("background-color", "transparent");
     event.container.element.nativeElement.style.setProperty("opacity", "100%");
     event.container.element.nativeElement.style.setProperty("background-image", this.newImageDrop.url.toString());
+  }
+
+  deleteItem(event: GridItemContent){
+    this.battleGrid.splice(this.battleGrid.findIndex(x => x.id === event.id),1);
+  }
+
+  hideItem(){
+    new Promise(resolve => setTimeout(this.showItem = '', 1000));
   }
 }

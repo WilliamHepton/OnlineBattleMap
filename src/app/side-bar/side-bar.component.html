@@ -4,8 +4,8 @@
     <div class="upload-file">
       <h2>Upload image</h2>
       <input type="file" (change)="onFileSelect($event)">
-      <button type="button" (click)="onSave()">Save</button>
-      <button type="button" (click)="onLoad()">Load</button>
+      <button mat-raised-button type="button" (click)="onSave()">Save</button>
+      <button mat-raised-button type="button" (click)="onLoad()">Load</button>
     </div>
       <div class="example-container" *ngFor="let category of categories">
         <h2>{{category.name}}</h2>
