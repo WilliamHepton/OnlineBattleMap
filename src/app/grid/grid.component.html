@@ -30,7 +30,7 @@
     (cdkDropListDropped)="drop($event)"
     >
     <div *ngIf="hoverIndex == item.id">
-      <button mat-raised-button color="warn" (click)="deleteItem(item)" class="add-button cols-2">X</button>
+      <button [ngStyle]="{'opacity': '50%'}" (click)="deleteItem(item)">X</button>
     </div>
   </gridster-item>
 </gridster>
