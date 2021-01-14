@@ -115,6 +115,9 @@ export class GridComponent implements OnInit, OnChanges {
   }
 
   newItemId(): number {
+    if (this.battleGrid.length === 0) {
+      return 0;
+    }
     return this.battleGrid[this.battleGrid.length-1].id + 1;
   }
 
